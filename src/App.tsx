@@ -59,7 +59,7 @@ const App: FunctionComponent<AppProps> = () => {
   return (
     <Container maxWidth="sm" sx={{ mt: 5 }}>
       <Typography variant="h4" gutterBottom>
-        George's Spelling Practice
+        Spelling bee 4-6
       </Typography>
 
       <Box display="flex" gap={2} mb={3}>
