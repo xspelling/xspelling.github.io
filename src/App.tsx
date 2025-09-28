@@ -24,11 +24,20 @@ const App: FunctionComponent<AppProps> = () => {
   // 播放语音（FastAPI 提供 TTS 接口）
   const playWord = async (): Promise<void> => {
     try {
-      const res = await fetch(`/api/pronounce?word=${word}`);
+      const res = await fetch(`https://xspelling.duckdns.org/api/pronounce?word=${encodeURIComponent(word)}`);
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const audio = new Audio(url);
-      audio.play();
+
+      audio.play().catch((e) => {
+        console.error("Autoplay blocked or failed:", e);
+      });
+
     } catch (err) {
       console.error("Failed to play word:", err);
     }
