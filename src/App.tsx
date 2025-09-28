@@ -11,9 +11,9 @@ const App: FunctionComponent<AppProps> = () => {
   // 获取随机单词
   const fetchWord = async (): Promise<void> => {
     try {
-      const res = await fetch("http://159.54.164.193:8000/api/get_word");
+      const res = await fetch("https://xspelling.duckdns.org/api/get_word");
       const data = await res.json();
-      setWord(data.word);
+      setWord(data.result);
       setInput("");
       setFeedback("");
     } catch (err) {
