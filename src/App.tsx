@@ -43,14 +43,18 @@ const App: FunctionComponent<AppProps> = () => {
     }
   };
 
-  // 校验拼写
   const checkSpelling = (): void => {
-    if (input.trim().toLowerCase() === word.toLowerCase()) {
+    const isCorrect = input.trim().toLowerCase() === word.toLowerCase();
+
+    if (isCorrect) {
       setFeedback("✅ Correct!");
+      new Audio("/correct.mp3").play();
     } else {
       setFeedback(`❌ Incorrect. The word was "${word}"`);
+      new Audio("/wrong.mp3").play();
     }
   };
+
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setInput(e.target.value);
