@@ -48,10 +48,10 @@ const App: FunctionComponent<AppProps> = () => {
 
     if (isCorrect) {
       setFeedback("✅ Correct!");
-      new Audio("public/correct.mp3").play();
+      new Audio("/correct.mp3").play();
     } else {
       setFeedback(`❌ Incorrect. The word was "${word}"`);
-      new Audio("public/wrong.mp3").play();
+      new Audio("/wrong.mp3").play();
     }
   };
 
