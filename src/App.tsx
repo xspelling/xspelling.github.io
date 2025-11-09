@@ -5,11 +5,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 interface AppProps { }
 
+type Page = "Home" | "Invite Friends";
 const App: FunctionComponent<AppProps> = () => {
   const [word, setWord] = useState<string>(""); // FastAPI 返回的单词
   const [input, setInput] = useState<string>(""); // 用户输入
+  const [inputEmail, setInputEmail] = useState<string>(""); // email
   const [feedback, setFeedback] = useState<string>("");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [page, setPage] = useState<Page>("Home"); // FastAPI 返回的单词
   // 获取随机单词
   const fetchWord = async (): Promise<void> => {
     try {
@@ -56,6 +59,11 @@ const App: FunctionComponent<AppProps> = () => {
       new Audio("/wrong.mp3").play();
     }
   };
+
+  const inviteFriends = () => {
+
+  }
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -73,10 +81,16 @@ const App: FunctionComponent<AppProps> = () => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setInput(e.target.value);
   };
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+
+  const handleInputEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setInputEmail(e.target.value);
   };
-  const pages = ['Products', 'Pricing', 'Blog'];
+  const handleCloseNavMenu = (key) => {
+    setAnchorElNav(null);
+    console.log("hi");
+    setPage(key);
+  };
+  const pages = ['Home', 'Invite Friends', 'Blog'];
   return (
     <Box >
       <AppBar >
@@ -126,7 +140,7 @@ const App: FunctionComponent<AppProps> = () => {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
                   <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                 </MenuItem>
               ))}
@@ -137,7 +151,7 @@ const App: FunctionComponent<AppProps> = () => {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleCloseNavMenu(page)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
@@ -175,43 +189,62 @@ const App: FunctionComponent<AppProps> = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      <Box display="flex" gap={2} mb={3} mt="100px">
-        <Button variant="contained" color="primary" onClick={fetchWord}>
-          Get Word
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={playWord}
-          disabled={!word}
-        >
-          Play Word
-        </Button>
-      </Box>
-      {word && (
-        <Box mb={3}>
+      {page == "Home" &&
+        <Box>
+          <Box display="flex" gap={2} mb={3} mt="100px">
+            <Button variant="contained" color="primary" onClick={fetchWord}>
+              Get Word
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={playWord}
+              disabled={!word}
+            >
+              Play Word
+            </Button>
+          </Box>
+          {word && (
+            <Box mb={3}>
+              <TextField
+                label="Type the word"
+                variant="outlined"
+                fullWidth
+                value={input}
+                onChange={handleInputChange}
+              />
+            </Box>
+          )}
+
+          {word && (
+            <Button variant="contained" color="success" onClick={checkSpelling}>
+              Submit
+            </Button>
+          )}
+
+          {feedback && (
+            <Typography variant="h6" sx={{ mt: 3 }}>
+              {feedback}
+            </Typography>
+          )}
+        </Box>
+      }
+      {page == "Invite Friends" &&
+        <Box display="flex" gap={2} mb={3} mt="100px">
           <TextField
-            label="Type the word"
+            label="Type your friend's email"
             variant="outlined"
             fullWidth
-            value={input}
-            onChange={handleInputChange}
+            value={inputEmail}
+            onChange={handleInputEmailChange}
           />
+          <Button variant="contained" color="success" onClick={inviteFriends}>
+            Invite
+          </Button>
         </Box>
-      )}
-
-      {word && (
-        <Button variant="contained" color="success" onClick={checkSpelling}>
-          Submit
-        </Button>
-      )}
-
-      {feedback && (
-        <Typography variant="h6" sx={{ mt: 3 }}>
-          {feedback}
-        </Typography>
-      )}
+      }
     </Box>
+
   );
 };
 
