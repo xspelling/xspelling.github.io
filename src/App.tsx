@@ -5,7 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 interface AppProps { }
 
-type Page = "Home" | "Invite Friends";
+type Page = "Home" | "Invite Friends" | "Blog";
 const App: FunctionComponent<AppProps> = () => {
   const [word, setWord] = useState<string>(""); // FastAPI 返回的单词
   const [input, setInput] = useState<string>(""); // 用户输入
@@ -13,6 +13,8 @@ const App: FunctionComponent<AppProps> = () => {
   const [feedback, setFeedback] = useState<string>("");
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [page, setPage] = useState<Page>("Home"); // FastAPI 返回的单词
+
+  const [inviteFeedback, setInviteFeedback] = useState<string>(""); // exception
   // 获取随机单词
   const fetchWord = async (): Promise<void> => {
     try {
@@ -60,7 +62,36 @@ const App: FunctionComponent<AppProps> = () => {
     }
   };
 
-  const inviteFriends = () => {
+  /** send email */
+  const inviteFriends = async () => {
+    try {
+      const res = await fetch("https://xspelling.duckdns.org/api/invite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          friend_email: inputEmail,
+          inviter_name: "George",
+          room_id: "spelling party"
+        })
+      });
+
+      if (!res.ok) {
+        setInviteFeedback("send failed, please check the email address and try again");
+      }
+
+      const data = await res.json();
+
+      setInviteFeedback(data.message);
+
+
+    } catch (err) {
+      setInviteFeedback(err as string);
+    }
+
+
+
 
   }
 
@@ -85,12 +116,11 @@ const App: FunctionComponent<AppProps> = () => {
   const handleInputEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setInputEmail(e.target.value);
   };
-  const handleCloseNavMenu = (key) => {
+  const handleCloseNavMenu = (key: Page) => {
     setAnchorElNav(null);
-    console.log("hi");
     setPage(key);
   };
-  const pages = ['Home', 'Invite Friends', 'Blog'];
+  const pages: Page[] = ['Home', 'Invite Friends', 'Blog'];
   return (
     <Box >
       <AppBar >
@@ -221,7 +251,6 @@ const App: FunctionComponent<AppProps> = () => {
               Submit
             </Button>
           )}
-
           {feedback && (
             <Typography variant="h6" sx={{ mt: 3 }}>
               {feedback}
@@ -234,6 +263,7 @@ const App: FunctionComponent<AppProps> = () => {
           <TextField
             label="Type your friend's email"
             variant="outlined"
+            type="email"
             fullWidth
             value={inputEmail}
             onChange={handleInputEmailChange}
@@ -241,6 +271,11 @@ const App: FunctionComponent<AppProps> = () => {
           <Button variant="contained" color="success" onClick={inviteFriends}>
             Invite
           </Button>
+          {inviteFeedback && (
+            <Typography variant="h6" sx={{ mt: 3 }}>
+              {inviteFeedback}
+            </Typography>
+          )}
         </Box>
       }
     </Box>
