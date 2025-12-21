@@ -150,6 +150,7 @@ const App: FunctionComponent<AppProps> = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               color="inherit"
+              onClick={handleOpenNavMenu}
             >
               <MenuIcon />
             </IconButton>
@@ -196,7 +197,7 @@ const App: FunctionComponent<AppProps> = () => {
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
-              id="menu-appbar"
+              id="menu-appbar2"
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: 'top',
