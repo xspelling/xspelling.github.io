@@ -1,8 +1,10 @@
 import React, { FunctionComponent, useState, ChangeEvent } from "react";
-import { Container, Typography, TextField, Button, Box, IconButton, AppBar, Toolbar, Menu, MenuItem, Tooltip } from "@mui/material";
+import { Container, Typography, TextField, Button, Box, IconButton, AppBar, Toolbar, Menu, MenuItem, Tooltip, CircularProgress } from "@mui/material";
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
+import Race from "./Race";
+
 interface AppProps { }
 
 type Page = "Home" | "Invite Friends" | "Blog";
@@ -120,7 +122,7 @@ const App: FunctionComponent<AppProps> = () => {
     setAnchorElNav(null);
     setPage(key);
   };
-  const pages: Page[] = ['Home', 'Invite Friends', 'Blog'];
+  const pages: Page[] = ['Home', 'Invite Friends', 'Race'];
   return (
     <Box >
       <AppBar >
@@ -278,6 +280,9 @@ const App: FunctionComponent<AppProps> = () => {
             </Typography>
           )}
         </Box>
+      }
+      {page == "Race" &&
+        <Race />
       }
     </Box>
 
