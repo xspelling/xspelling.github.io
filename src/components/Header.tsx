@@ -19,9 +19,9 @@ function Header() {
     <AppBar 
       position="fixed" 
       sx={{ 
-        background: 'rgba(0, 0, 0, 0.8)',
+        background: 'rgba(255, 255, 255, 0.8)',
         backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',
       }}
     >
       <Container maxWidth="xl">
@@ -31,7 +31,7 @@ function Header() {
             <Typography 
               variant="h6" 
               sx={{ 
-                color: '#f5f5f7', 
+                color: '#1d1d1f', 
                 fontWeight: 700,
                 letterSpacing: '-0.01em',
               }}
@@ -48,15 +48,15 @@ function Header() {
                 to={item.path}
                 startIcon={item.icon}
                 sx={{
-                  color: location.pathname === item.path ? '#0071e3' : '#86868b',
+                  color: location.pathname === item.path ? '#0071e3' : '#1d1d1f',
                   fontSize: '14px',
                   fontWeight: 500,
                   px: 2,
                   py: 1,
                   borderRadius: 8,
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    color: '#f5f5f7',
+                    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                    color: '#1d1d1f',
                   },
                 }}
               >

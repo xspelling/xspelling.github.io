@@ -78,7 +78,7 @@ const Keyboard = observer(() => {
   const targetKey = currentChar.toLowerCase();
 
   return (
-    <Box sx={{ p: 3, background: '#1d1d1f', borderRadius: 3 }}>
+    <Box sx={{ p: 3, background: '#f5f5f7', borderRadius: 3 }}>
       <Box sx={{ mb: 2, textAlign: 'center' }}>
         <Typography variant="h6" sx={{ color: currentFinger.fingerColor, mb: 0.5 }}>
           Use: {currentFinger.finger}
@@ -101,7 +101,7 @@ const Keyboard = observer(() => {
             {row.map((key) => {
               const isTarget = key === targetKey;
               const fingerInfo = FINGER_MAP[key];
-              const fingerColor = fingerInfo ? FINGER_COLORS[fingerInfo.finger] : '#444';
+              const fingerColor = fingerInfo ? FINGER_COLORS[fingerInfo.finger] : '#d1d1d6';
               const isHighlighted = isTarget;
 
               return (
@@ -114,16 +114,16 @@ const Keyboard = observer(() => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: 1,
-                    backgroundColor: isHighlighted ? fingerColor : '#2d2d2f',
-                    border: isHighlighted ? `2px solid ${fingerColor}` : '1px solid rgba(255,255,255,0.1)',
-                    boxShadow: isHighlighted ? `0 0 20px ${fingerColor}40` : 'none',
+                    backgroundColor: isHighlighted ? fingerColor : '#ffffff',
+                    border: isHighlighted ? `2px solid ${fingerColor}` : '1px solid #d2d2d7',
+                    boxShadow: isHighlighted ? `0 0 20px ${fingerColor}40` : '0 1px 3px rgba(0,0,0,0.1)',
                     transition: 'all 0.1s ease',
                     transform: isHighlighted ? 'scale(1.1)' : 'scale(1)',
                   }}
                 >
                   <Typography
                     sx={{
-                      color: isHighlighted ? '#000' : '#f5f5f7',
+                      color: isHighlighted ? '#000' : '#1d1d1f',
                       fontWeight: isHighlighted ? 700 : 400,
                       fontSize: key === ' ' ? 12 : 14,
                       textTransform: key === ' ' ? 'uppercase' : 'none',

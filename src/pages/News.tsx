@@ -23,10 +23,10 @@ const News = observer(() => {
   const store = articleStore;
 
   return (
-    <Box sx={{ minHeight: '100vh', background: '#000', pt: 8, pb: 4 }}>
+    <Box sx={{ minHeight: '100vh', background: '#f5f5f7', pt: 8, pb: 4 }}>
       <Container maxWidth="lg">
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h2" sx={{ mb: 2, color: '#f5f5f7' }}>
+          <Typography variant="h2" sx={{ mb: 2, color: '#1d1d1f' }}>
             Article Library
           </Typography>
           <Typography variant="body1" sx={{ color: '#86868b', mb: 4 }}>
@@ -49,12 +49,10 @@ const News = observer(() => {
               sx={{
                 minWidth: 250,
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#1d1d1f',
-                  color: '#f5f5f7',
-                  '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                  backgroundColor: '#fff',
+                  '& fieldset': { borderColor: '#d2d2d7' },
                   '&:hover fieldset': { borderColor: '#0071e3' },
                 },
-                '& .MuiInputLabel-root': { color: '#86868b' },
               }}
             />
 
@@ -66,11 +64,9 @@ const News = observer(() => {
               sx={{
                 minWidth: 150,
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#1d1d1f',
-                  color: '#f5f5f7',
-                  '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                  backgroundColor: '#fff',
+                  '& fieldset': { borderColor: '#d2d2d7' },
                 },
-                '& .MuiInputLabel-root': { color: '#86868b' },
               }}
             >
               <MenuItem value="all">All Categories</MenuItem>
@@ -88,11 +84,9 @@ const News = observer(() => {
               sx={{
                 minWidth: 150,
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#1d1d1f',
-                  color: '#f5f5f7',
-                  '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                  backgroundColor: '#fff',
+                  '& fieldset': { borderColor: '#d2d2d7' },
                 },
-                '& .MuiInputLabel-root': { color: '#86868b' },
               }}
             >
               <MenuItem value="all">All Levels</MenuItem>
@@ -108,17 +102,14 @@ const News = observer(() => {
             <Grid item xs={12} sm={6} md={4} key={article.id}>
               <Card
                 sx={{
-                  background: '#1d1d1f',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  border: '1px solid rgba(255,255,255,0.05)',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    borderColor: '#0071e3',
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                   },
                 }}
               >
@@ -135,7 +126,7 @@ const News = observer(() => {
                       label={article.category}
                       size="small"
                       sx={{
-                        backgroundColor: `${categoryColors[article.category]}20`,
+                        backgroundColor: `${categoryColors[article.category]}15`,
                         color: categoryColors[article.category],
                         fontWeight: 500,
                         textTransform: 'capitalize',
@@ -145,7 +136,7 @@ const News = observer(() => {
                       label={article.difficulty}
                       size="small"
                       sx={{
-                        backgroundColor: `${difficultyColors[article.difficulty]}20`,
+                        backgroundColor: `${difficultyColors[article.difficulty]}15`,
                         color: difficultyColors[article.difficulty],
                         fontWeight: 500,
                         textTransform: 'capitalize',
@@ -156,7 +147,7 @@ const News = observer(() => {
                   <Typography
                     variant="h6"
                     sx={{
-                      color: '#f5f5f7',
+                      color: '#1d1d1f',
                       mb: 1,
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',

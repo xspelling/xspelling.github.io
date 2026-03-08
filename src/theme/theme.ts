@@ -2,7 +2,7 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
       main: '#0071e3',
       light: '#0077ed',
@@ -12,11 +12,11 @@ const theme = createTheme({
       main: '#86868b',
     },
     background: {
-      default: '#000000',
-      paper: '#1d1d1f',
+      default: '#f5f5f7',
+      paper: '#ffffff',
     },
     text: {
-      primary: '#f5f5f7',
+      primary: '#1d1d1f',
       secondary: '#86868b',
     },
     success: {
@@ -30,7 +30,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif',
     h1: {
       fontSize: '80px',
       fontWeight: 700,
@@ -88,8 +88,9 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2d2d2f',
-          borderRadius: 16,
+          backgroundColor: '#ffffff',
+          borderRadius: 20,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
         },
       },
     },
@@ -97,6 +98,15 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
+        },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(255,255,255,0.8)',
+          backdropFilter: 'blur(20px)',
+          boxShadow: '0 1px 0 rgba(0,0,0,0.1)',
         },
       },
     },

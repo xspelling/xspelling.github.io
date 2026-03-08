@@ -38,10 +38,10 @@ const Practice = observer(() => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', background: '#000', pt: 8, pb: 4 }}>
+    <Box sx={{ minHeight: '100vh', background: '#f5f5f7', pt: 8, pb: 4 }}>
       <Container maxWidth="lg">
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h2" sx={{ mb: 2, color: '#f5f5f7' }}>
+          <Typography variant="h2" sx={{ mb: 2, color: '#1d1d1f' }}>
             Practice Mode
           </Typography>
           <Typography variant="body1" sx={{ color: '#86868b' }}>
@@ -51,9 +51,9 @@ const Practice = observer(() => {
 
         <Grid container spacing={3} sx={{ mb: 4 }}>
           <Grid item xs={12} md={8}>
-            <Card sx={{ background: '#1d1d1f', p: 3, mb: 3 }}>
+            <Card sx={{ p: 3, mb: 3 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h6" sx={{ color: '#f5f5f7' }}>Text to Type</Typography>
+                <Typography variant="h6" sx={{ color: '#1d1d1f' }}>Text to Type</Typography>
                 <Button size="small" onClick={handleReset} sx={{ color: '#0071e3' }}>
                   Reset
                 </Button>
@@ -68,7 +68,7 @@ const Practice = observer(() => {
                     color = '#0071e3';
                   }
                   return (
-                    <span key={index} style={{ color, backgroundColor: index === store.currentIndex ? 'rgba(0,113,227,0.2)' : 'transparent' }}>
+                    <span key={index} style={{ color, backgroundColor: index === store.currentIndex ? 'rgba(0,113,227,0.1)' : 'transparent' }}>
                       {char}
                     </span>
                   );
@@ -81,7 +81,7 @@ const Practice = observer(() => {
                 sx={{ 
                   height: 6, 
                   borderRadius: 3,
-                  backgroundColor: '#2d2d2f',
+                  backgroundColor: '#e5e5ea',
                   '& .MuiLinearProgress-bar': { backgroundColor: '#0071e3' }
                 }} 
               />
@@ -89,8 +89,8 @@ const Practice = observer(() => {
 
             <Keyboard />
 
-            <Card sx={{ background: '#1d1d1f', mt: 3, p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, color: '#f5f5f7' }}>Quick Texts</Typography>
+            <Card sx={{ mt: 3, p: 3 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: '#1d1d1f' }}>Quick Texts</Typography>
               <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 {defaultTexts.map((text, index) => (
                   <Button
@@ -98,7 +98,7 @@ const Practice = observer(() => {
                     variant="outlined"
                     size="small"
                     onClick={() => handleTextChange(text)}
-                    sx={{ borderColor: '#86868b', color: '#f5f5f7', fontSize: 12 }}
+                    sx={{ borderColor: '#d2d2d7', color: '#1d1d1f', fontSize: 12 }}
                   >
                     {text.slice(0, 30)}...
                   </Button>
@@ -108,8 +108,8 @@ const Practice = observer(() => {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Card sx={{ background: '#1d1d1f', p: 3, mb: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, color: '#f5f5f7' }}>Statistics</Typography>
+            <Card sx={{ p: 3, mb: 3 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: '#1d1d1f' }}>Statistics</Typography>
               
               <Box sx={{ mb: 3 }}>
                 <Typography variant="caption" sx={{ color: '#86868b' }}>WPM</Typography>
@@ -125,14 +125,14 @@ const Practice = observer(() => {
               
               <Box>
                 <Typography variant="caption" sx={{ color: '#86868b' }}>Progress</Typography>
-                <Typography variant="h5" sx={{ color: '#f5f5f7' }}>
+                <Typography variant="h5" sx={{ color: '#1d1d1f' }}>
                   {store.currentIndex} / {store.text.length}
                 </Typography>
               </Box>
             </Card>
 
-            <Card sx={{ background: '#1d1d1f', p: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, color: '#f5f5f7' }}>Select Article</Typography>
+            <Card sx={{ p: 3 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: '#1d1d1f' }}>Select Article</Typography>
               <TextField
                 select
                 fullWidth
@@ -141,12 +141,10 @@ const Practice = observer(() => {
                 onChange={(e) => selectArticle(e.target.value)}
                 sx={{
                   '& .MuiOutlinedInput-root': {
-                    backgroundColor: '#2d2d2f',
-                    color: '#f5f5f7',
-                    '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                    backgroundColor: '#fff',
+                    '& fieldset': { borderColor: '#d2d2d7' },
                     '&:hover fieldset': { borderColor: '#0071e3' },
                   },
-                  '& .MuiInputLabel-root': { color: '#86868b' },
                 }}
               >
                 <MenuItem value="">Select article...</MenuItem>
@@ -167,12 +165,11 @@ const Practice = observer(() => {
                       mb: 1,
                       borderRadius: 1,
                       cursor: 'pointer',
-                      backgroundColor: '#2d2d2f',
-                      border: '1px solid rgba(255,255,255,0.05)',
-                      '&:hover': { borderColor: '#0071e3' },
+                      backgroundColor: '#f5f5f7',
+                      '&:hover': { backgroundColor: '#e5e5ea' },
                     }}
                   >
-                    <Typography variant="body2" sx={{ color: '#f5f5f7', fontWeight: 500 }}>
+                    <Typography variant="body2" sx={{ color: '#1d1d1f', fontWeight: 500 }}>
                       {article.title}
                     </Typography>
                     <Typography variant="caption" sx={{ color: '#86868b' }}>
@@ -186,7 +183,7 @@ const Practice = observer(() => {
         </Grid>
 
         {store.isComplete && (
-          <Card sx={{ background: '#1d1d1f', p: 4, textAlign: 'center', mt: 3 }}>
+          <Card sx={{ p: 4, textAlign: 'center', mt: 3 }}>
             <Typography variant="h4" sx={{ mb: 3, color: '#30d158' }}>Completed!</Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={4}>

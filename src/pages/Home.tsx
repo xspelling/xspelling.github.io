@@ -38,15 +38,13 @@ function Home() {
   ];
 
   return (
-    <Box sx={{ minHeight: '100vh', background: '#000' }}>
+    <Box sx={{ minHeight: '100vh', background: '#f5f5f7' }}>
       <Container maxWidth="lg">
         <Box sx={{ pt: 16, pb: 8, textAlign: 'center' }}>
           <Typography
             variant="h1"
             sx={{
-              background: 'linear-gradient(135deg, #fff 0%, #86868b 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: '#1d1d1f',
               mb: 3,
             }}
           >
@@ -79,12 +77,12 @@ function Home() {
               size="large"
               onClick={() => navigate('/race')}
               sx={{
-                borderColor: '#86868b',
-                color: '#f5f5f7',
+                borderColor: '#d2d2d7',
+                color: '#1d1d1f',
                 fontSize: '18px',
                 px: 4,
                 py: 1.5,
-                '&:hover': { borderColor: '#f5f5f7', backgroundColor: 'rgba(255,255,255,0.05)' },
+                '&:hover': { borderColor: '#1d1d1f', backgroundColor: 'rgba(0,0,0,0.02)' },
               }}
             >
               Race Mode
@@ -100,19 +98,16 @@ function Home() {
                 sx={{
                   cursor: 'pointer',
                   height: '100%',
-                  background: '#1d1d1f',
-                  border: '1px solid rgba(255,255,255,0.1)',
                   transition: 'all 0.3s ease',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    borderColor: '#0071e3',
-                    boxShadow: '0 20px 40px rgba(0,113,227,0.2)',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                   },
                 }}
               >
                 <Box sx={{ textAlign: 'center', p: 4 }}>
                   <Box sx={{ color: '#0071e3', mb: 2 }}>{feature.icon}</Box>
-                  <Typography variant="h6" sx={{ mb: 1, color: '#f5f5f7' }}>
+                  <Typography variant="h6" sx={{ mb: 1, color: '#1d1d1f' }}>
                     {feature.title}
                   </Typography>
                   <Typography variant="body2" sx={{ color: '#86868b' }}>
@@ -125,7 +120,7 @@ function Home() {
         </Grid>
 
         <Box sx={{ py: 8, textAlign: 'center' }}>
-          <Typography variant="h2" sx={{ mb: 4, color: '#f5f5f7' }}>
+          <Typography variant="h2" sx={{ mb: 4, color: '#1d1d1f' }}>
             Ready to improve?
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
@@ -134,12 +129,10 @@ function Home() {
               sx={{
                 cursor: 'pointer',
                 width: 280,
-                background: 'linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%)',
-                border: '1px solid rgba(255,255,255,0.1)',
                 transition: 'all 0.3s ease',
                 '&:hover': {
-                  borderColor: '#0071e3',
                   transform: 'scale(1.02)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                 },
               }}
             >
@@ -156,18 +149,16 @@ function Home() {
               sx={{
                 cursor: 'pointer',
                 width: 280,
-                background: 'linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%)',
-                border: '1px solid rgba(255,255,255,0.1)',
                 transition: 'all 0.3s ease',
                 '&:hover': {
-                  borderColor: '#ff6b6b',
                   transform: 'scale(1.02)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
                 },
               }}
             >
               <Box sx={{ textAlign: 'center', py: 5 }}>
                 <SportsScoreIcon sx={{ fontSize: 60, color: '#ff6b6b', mb: 2 }} />
-               ', mb:  <Typography variant="h5" sx={{ mb: 1 }}>Race Mode</Typography>
+                <Typography variant="h5" sx={{ mb: 1 }}>Race Mode</Typography>
                 <Typography variant="body2" sx={{ color: '#86868b' }}>
                   Compete with friends
                 </Typography>

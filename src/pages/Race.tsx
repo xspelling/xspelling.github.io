@@ -16,7 +16,7 @@ function RaceCar({ player, isCurrentPlayer }: { player: Player; isCurrentPlayer:
       </Box>
       <Box sx={{ 
         height: 40, 
-        background: '#2d2d2f', 
+        background: '#e5e5ea', 
         borderRadius: 2, 
         position: 'relative',
         overflow: 'hidden'
@@ -120,11 +120,11 @@ const Race = observer(() => {
 
   if (roomCode && store.currentRoom) {
     return (
-      <Box sx={{ minHeight: '100vh', background: '#000', pt: 8, pb: 4 }}>
+      <Box sx={{ minHeight: '100vh', background: '#f5f5f7', pt: 8, pb: 4 }}>
         <Container maxWidth="md">
-          <Card sx={{ background: '#1d1d1f', p: 3, mb: 3 }}>
+          <Card sx={{ p: 3, mb: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Typography variant="h5" sx={{ color: '#f5f5f7' }}>
+              <Typography variant="h5" sx={{ color: '#1d1d1f' }}>
                 Room: {roomCode}
               </Typography>
               <Button 
@@ -151,7 +151,7 @@ const Race = observer(() => {
           </Card>
 
           {store.currentRoom.status === 'waiting' && (
-            <Card sx={{ background: '#1d1d1f', p: 3, textAlign: 'center' }}>
+            <Card sx={{ p: 3, textAlign: 'center' }}>
               <Typography variant="h6" sx={{ mb: 2, color: '#86868b' }}>
                 Waiting for players...
               </Typography>
@@ -172,7 +172,7 @@ const Race = observer(() => {
           )}
 
           {store.winner && (
-            <Card sx={{ background: '#1d1d1f', p: 4, textAlign: 'center', mt: 3 }}>
+            <Card sx={{ p: 4, textAlign: 'center', mt: 3 }}>
               <Typography variant="h3" sx={{ mb: 2, color: '#ffd60a' }}>
                 🏆 {store.winner} Wins!
               </Typography>
@@ -190,15 +190,15 @@ const Race = observer(() => {
           )}
 
           {gameStarted && !store.winner && (
-            <Card sx={{ background: '#1d1d1f', p: 3, mt: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, color: '#f5f5f7' }}>Your Progress</Typography>
+            <Card sx={{ p: 3, mt: 3 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: '#1d1d1f' }}>Your Progress</Typography>
               <LinearProgress 
                 variant="determinate" 
                 value={typing.progress}
                 sx={{ 
                   height: 8, 
                   borderRadius: 4,
-                  backgroundColor: '#2d2d2f',
+                  backgroundColor: '#e5e5ea',
                   '& .MuiLinearProgress-bar': { backgroundColor: '#30d158' }
                 }}
               />
@@ -214,11 +214,11 @@ const Race = observer(() => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', background: '#000', pt: 8, pb: 4 }}>
+    <Box sx={{ minHeight: '100vh', background: '#f5f5f7', pt: 8, pb: 4 }}>
       <Container maxWidth="md">
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <SportsScoreIcon sx={{ fontSize: 80, color: '#ff6b6b', mb: 2 }} />
-          <Typography variant="h2" sx={{ mb: 2, color: '#f5f5f7' }}>
+          <Typography variant="h2" sx={{ mb: 2, color: '#1d1d1f' }}>
             Race Mode
           </Typography>
           <Typography variant="body1" sx={{ color: '#86868b' }}>
@@ -231,17 +231,15 @@ const Race = observer(() => {
             <Card 
               onClick={() => setCreateDialogOpen(true)}
               sx={{ 
-                background: 'linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%)',
                 p: 4, 
                 cursor: 'pointer',
                 textAlign: 'center',
-                border: '1px solid rgba(255,255,255,0.1)',
                 transition: 'all 0.3s',
-                '&:hover': { borderColor: '#30d158', transform: 'scale(1.02)' }
+                '&:hover': { transform: 'scale(1.02)', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }
               }}
             >
               <AddIcon sx={{ fontSize: 60, color: '#30d158', mb: 2 }} />
-              <Typography variant="h5" sx={{ mb: 1, color: '#f5f5f7' }}>Create Room</Typography>
+              <Typography variant="h5" sx={{ mb: 1, color: '#1d1d1f' }}>Create Room</Typography>
               <Typography variant="body2" sx={{ color: '#86868b' }}>
                 Start a new race and invite friends
               </Typography>
@@ -252,17 +250,15 @@ const Race = observer(() => {
             <Card 
               onClick={() => setJoinDialogOpen(true)}
               sx={{ 
-                background: 'linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%)',
                 p: 4, 
                 cursor: 'pointer',
                 textAlign: 'center',
-                border: '1px solid rgba(255,255,255,0.1)',
                 transition: 'all 0.3s',
-                '&:hover': { borderColor: '#0071e3', transform: 'scale(1.02)' }
+                '&:hover': { transform: 'scale(1.02)', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }
               }}
             >
               <Typography variant="h1" sx={{ mb: 1, color: '#0071e3' }}>🔗</Typography>
-              <Typography variant="h5" sx={{ mb: 1, color: '#f5f5f7' }}>Join Room</Typography>
+              <Typography variant="h5" sx={{ mb: 1, color: '#1d1d1f' }}>Join Room</Typography>
               <Typography variant="body2" sx={{ color: '#86868b' }}>
                 Enter a room code to join a race
               </Typography>
@@ -273,9 +269,9 @@ const Race = observer(() => {
         <Dialog 
           open={createDialogOpen} 
           onClose={() => setCreateDialogOpen(false)}
-          PaperProps={{ sx: { background: '#1d1d1f', borderRadius: 3, p: 2 } }}
+          PaperProps={{ sx: { borderRadius: 3, p: 2 } }}
         >
-          <DialogTitle sx={{ color: '#f5f5f7' }}>Create Race Room</DialogTitle>
+          <DialogTitle sx={{ color: '#1d1d1f' }}>Create Race Room</DialogTitle>
           <DialogContent>
             <TextField
               fullWidth
@@ -284,11 +280,9 @@ const Race = observer(() => {
               onChange={(e) => setPlayerName(e.target.value.slice(0, 8))}
               sx={{ mt: 2, mb: 2,
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#2d2d2f',
-                  color: '#f5f5f7',
-                  '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                  backgroundColor: '#fff',
+                  '& fieldset': { borderColor: '#d2d2d7' },
                 },
-                '& .MuiInputLabel-root': { color: '#86868b' },
               }}
             />
             <TextField
@@ -299,11 +293,9 @@ const Race = observer(() => {
               onChange={(e) => setSelectedText(e.target.value)}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#2d2d2f',
-                  color: '#f5f5f7',
-                  '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                  backgroundColor: '#fff',
+                  '& fieldset': { borderColor: '#d2d2d7' },
                 },
-                '& .MuiInputLabel-root': { color: '#86868b' },
               }}
             >
               {articleStore.articles.map((article) => (
@@ -322,9 +314,9 @@ const Race = observer(() => {
         <Dialog 
           open={joinDialogOpen} 
           onClose={() => setJoinDialogOpen(false)}
-          PaperProps={{ sx: { background: '#1d1d1f', borderRadius: 3, p: 2 } }}
+          PaperProps={{ sx: { borderRadius: 3, p: 2 } }}
         >
-          <DialogTitle sx={{ color: '#f5f5f7' }}>Join Race Room</DialogTitle>
+          <DialogTitle sx={{ color: '#1d1d1f' }}>Join Race Room</DialogTitle>
           <DialogContent>
             <TextField
               fullWidth
@@ -333,11 +325,9 @@ const Race = observer(() => {
               onChange={(e) => setPlayerName(e.target.value.slice(0, 8))}
               sx={{ mt: 2, mb: 2,
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#2d2d2f',
-                  color: '#f5f5f7',
-                  '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                  backgroundColor: '#fff',
+                  '& fieldset': { borderColor: '#d2d2d7' },
                 },
-                '& .MuiInputLabel-root': { color: '#86868b' },
               }}
             />
             <TextField
@@ -347,11 +337,9 @@ const Race = observer(() => {
               onChange={(e) => setJoinCode(e.target.value.toUpperCase().slice(0, 6))}
               sx={{
                 '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#2d2d2f',
-                  color: '#f5f5f7',
-                  '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                  backgroundColor: '#fff',
+                  '& fieldset': { borderColor: '#d2d2d7' },
                 },
-                '& .MuiInputLabel-root': { color: '#86868b' },
               }}
             />
           </DialogContent>
