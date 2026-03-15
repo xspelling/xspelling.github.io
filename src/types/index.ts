@@ -1,58 +1,36 @@
 export interface Article {
   id: string;
   title: string;
+  excerpt: string;
   content: string;
-  category: 'tech' | 'science' | 'business' | 'lifestyle';
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  wordCount: number;
   imageUrl: string;
+  category: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
   readTime: number;
+  isPremium: boolean;
+  publishedAt: string;
+  author: string;
 }
 
-export interface Player {
+export interface User {
   id: string;
   name: string;
-  progress: number;
-  wpm: number;
-  isReady: boolean;
-  color: string;
+  isPremium: boolean;
+  bookmarks: string[];
 }
 
-export interface RaceRoom {
-  code: string;
-  host: string;
-  players: Player[];
-  status: 'waiting' | 'racing' | 'finished';
-  text: string;
-}
-
-export interface TypingSession {
-  startTime: number;
-  endTime?: number;
-  text: string;
-  typedText: string;
-  errors: number;
-  wpm: number;
-  accuracy: number;
-}
-
-export interface FingerKey {
-  key: string;
-  finger: string;
-  hand: 'left' | 'right';
-  fingerColor: string;
-}
-
-export const FINGER_COLORS: Record<string, string> = {
-  'Left Pinky': '#ff6b6b',
-  'Left Ring': '#feca57',
-  'Left Middle': '#48dbfb',
-  'Left Index': '#1dd1a1',
-  'Right Index': '#1dd1a1',
-  'Right Middle': '#48dbfb',
-  'Right Ring': '#feca57',
-  'Right Pinky': '#ff6b6b',
-  'Thumb': '#a29bfe',
+export const categoryColors: Record<string, string> = {
+  tech: '#0071e3',
+  science: '#30d158',
+  business: '#ffd60a',
+  sports: '#ff6b6b',
+  entertainment: '#a29bfe',
+  lifestyle: '#fd79a8',
+  world: '#00cec9',
 };
 
-export const RACE_COLORS = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3'];
+export const difficultyColors: Record<string, string> = {
+  beginner: '#30d158',
+  intermediate: '#ffd60a',
+  advanced: '#ff453a',
+};

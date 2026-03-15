@@ -9,6 +9,7 @@ export class ArticleStore {
   categoryFilter: string = 'all';
   difficultyFilter: string = 'all';
   bookmarkedIds: string[] = [];
+  isPremiumUser: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -16,14 +17,22 @@ export class ArticleStore {
   }
 
   loadBookmarks() {
-    const saved = localStorage.getItem('xspelling_bookmarks');
+    const saved = localStorage.getItem('litpro_bookmarks');
     if (saved) {
       this.bookmarkedIds = JSON.parse(saved);
+    }
+    const premium = localStorage.getItem('litpro_premium');
+    if (premium) {
+      this.isPremiumUser = JSON.parse(premium);
     }
   }
 
   saveBookmarks() {
-    localStorage.setItem('xspelling_bookmarks', JSON.stringify(this.bookmarkedIds));
+    localStorage.setItem('litpro_bookmarks', JSON.stringify(this.bookmarkedIds));
+  }
+
+  savePremium() {
+    localStorage.setItem('litpro_premium', JSON.stringify(this.isPremiumUser));
   }
 
   selectArticle(article: Article) {
@@ -60,11 +69,21 @@ export class ArticleStore {
     return this.bookmarkedIds.includes(articleId);
   }
 
+  subscribePremium() {
+    this.isPremiumUser = true;
+    this.savePremium();
+  }
+
+  canReadArticle(article: Article): boolean {
+    if (!article.isPremium) return true;
+    return this.isPremiumUser;
+  }
+
   get filteredArticles(): Article[] {
     return this.articles.filter(article => {
       const matchesSearch = this.searchQuery === '' || 
         article.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        article.content.toLowerCase().includes(this.searchQuery.toLowerCase());
+        article.excerpt.toLowerCase().includes(this.searchQuery.toLowerCase());
       
       const matchesCategory = this.categoryFilter === 'all' || article.category === this.categoryFilter;
       const matchesDifficulty = this.difficultyFilter === 'all' || article.difficulty === this.difficultyFilter;
@@ -73,8 +92,26 @@ export class ArticleStore {
     });
   }
 
+  get featuredArticles(): Article[] {
+    return this.articles.slice(0, 6);
+  }
+
+  get premiumArticles(): Article[] {
+    return this.articles.filter(a => a.isPremium);
+  }
+
+  get freeArticles(): Article[] {
+    return this.articles.filter(a => !a.isPremium);
+  }
+
   get bookmarkedArticles(): Article[] {
     return this.articles.filter(a => this.bookmarkedIds.includes(a.id));
+  }
+
+  get latestArticles(): Article[] {
+    return [...this.articles].sort((a, b) => 
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    );
   }
 }
 
