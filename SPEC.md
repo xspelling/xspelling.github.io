@@ -1,11 +1,11 @@
-# LitPro - Literacy Platform
+# TypeRush - Competitive Typing Platform
 
 ## 1. Project Overview
 
-- **Project Name**: LitPro
+- **Project Name**: TypeRush
 - **Project Type**: React Web Application (SPA)
-- **Core Functionality**: A literacy platform for reading articles, news, with premium subscription for exclusive content
-- **Target Users**: Students, educators, and literacy learners
+- **Core Functionality**: A competitive typing racing platform with seasons, garage, shop, friends, leagues, and premium features
+- **Target Users**: Typing enthusiasts, students, competitive players
 
 ## 2. Technology Stack
 
@@ -14,112 +14,167 @@
 - **UI Library**: Material UI v5
 - **Routing**: React Router v6
 - **Hosting**: GitHub Pages
+- **Ads**: Google AdSense
 
 ## 3. UI/UX Specification
 
-### 3.1 Color Palette (Apple-inspired Light Theme)
+### 3.1 Color Palette
 ```
---primary: #0071e3
---primary-hover: #0077ed
---secondary: #86868b
---background: #f5f5f7
---card-bg: #ffffff
---text-primary: #1d1d1f
---text-secondary: #86868b
---success: #30d158
---warning: #ffd60a
---premium-gold: #f5a623
---premium-gradient: linear-gradient(135deg, #f5a623 0%, #f5d023 100%)
+--primary: #6366f1 (Indigo)
+--primary-dark: #4f46e5
+--accent: #f59e0b (Amber/Gold)
+--success: #10b981
+--error: #ef4444
+--background: #0f172a (Dark blue-black)
+--card-bg: #1e293b
+--text-primary: #f8fafc
+--text-secondary: #94a3b8
+--cash: #22c55e (Green for cash)
+--premium: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)
 ```
 
 ### 3.2 Typography
-- **Font**: SF Pro Display, -apple-system, Segoe UI, Roboto
-- **Hero Title**: 56px, bold
-- **Section Title**: 40px, bold
-- **Card Title**: 20px, semibold
-- **Body**: 17px, regular
-- **Caption**: 13px, regular
+- **Font**: 'Orbitron' for headers, 'Inter' for body (racing/tech feel)
+- **Hero Title**: 48px, bold
+- **Section Title**: 32px, bold
+- **Body**: 16px, regular
 
-### 3.3 Layout
+### 3.3 Seasons System
+Seasons change quarterly with different themes:
+- **Spring** (Mar-May): Cherry blossoms, green themes, flower cars
+- **Summer** (Jun-Aug): Beach, ocean, bright colors
+- **Fall** (Sep-Nov): Autumn leaves, orange/brown themes
+- **Winter** (Dec-Feb): Snow, ice, holiday themes
 
-#### Header
-- Logo "LitPro" on left
-- Navigation: Home | News | Premium
-- User avatar on right
-- Fixed, glassmorphism effect
+Each season has:
+- Unique background image
+- Seasonal cars
+- Seasonal badges
+- Special shop items
 
-#### Pages
+## 4. Pages & Features
 
-**Home Page**
-- Hero section with tagline
-- Featured articles grid
-- Category filters
-- Reading difficulty indicators
+### 4.1 Header/Navigation
+- Logo left
+- Main nav: Race | Practice | Garage | Leagues
+- Right: User avatar, cash balance, triangle menu (logout)
 
-**News Page**
-- Latest news articles
-- Search functionality
-- Category filters (Tech, Science, Business, World, Sports)
-- Trending section
+### 4.2 Race Page
+- Car selection before race
+- 3-2-1 VROOM countdown
+- Racing track with lanes
+- Real-time position of opponents
+- Background music during race
+- Finish line results: speed, accuracy, placement
 
-**Premium Page**
-- Membership benefits
-- Pricing tiers (Monthly/Yearly)
-- Feature comparison
-- CTA buttons
+### 4.3 Practice Page
+- Finger guidance keyboard (from previous project)
+- WPM tracking
+- Accuracy tracking
+- No opponents (solo)
 
-**Article Detail Page**
-- Full article content
-- Reading progress bar
-- Related articles
-- Share functionality
+### 4.4 Garage
+- View owned cars
+- Select active car
+- Car stats display
+- Total value
 
-## 4. Features
+### 4.5 Shop
+- Browse cars by category
+- Buy with cash
+- Preview cars
+- Limited-time seasonal items
 
-### 4.1 Article Library
-- Articles with images, titles, excerpts
-- Categories: Technology, Science, Business, World, Sports, Entertainment
-- Difficulty levels: Beginner, Intermediate, Advanced
-- Reading time estimates
-- Bookmark functionality
+### 4.6 Friends
+- Friend list
+- Search users
+- Send/accept friend requests
+- Friend racing stats
 
-### 4.2 News Feed
-- Latest news articles
-- Search and filter
-- Trending articles
-- Daily updates (mock data)
+### 4.7 Leagues
+- Bronze, Silver, Gold, Platinum, Diamond, Champion
+- XP required for promotion
+- Weekly rewards
+- Leaderboard
 
-### 4.3 Premium Membership
-- Benefits: Unlimited articles, Ad-free, Offline reading, Exclusive content
-- Pricing: $9.99/month or $79.99/year
-- Feature comparison table
-- "Most Popular" badge on yearly plan
+### 4.8 News
+- Game updates
+- Seasonal announcements
+- Patch notes
+
+### 4.9 Premium (VIP Club)
+- Name: "VIP Club"
+- Benefits: 2x Cash, 2x XP, Exclusive cars, No ads
+- Pricing: $4.99/month or $39.99/year
+
+### 4.10 Settings
+- Change username
+- View profile stats
+- Account settings
 
 ## 5. Data Models
 
+### 5.1 Car
 ```typescript
-interface Article {
+interface Car {
   id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  imageUrl: string;
-  category: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  readTime: number;
-  isPremium: boolean;
-  publishedAt: string;
-  author: string;
+  name: string;
+  image: string;
+  speed: number;
+  acceleration: number;
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  price: number;
+  season?: string;
 }
 ```
 
-## 6. Acceptance Criteria
+### 5.2 User
+```typescript
+interface User {
+  id: string;
+  username: string;
+  avatar: string;
+  cash: number;
+  xp: number;
+  level: number;
+  league: string;
+  ownedCars: string[];
+  selectedCar: string;
+  isPremium: boolean;
+  friends: string[];
+  friendRequests: string[];
+}
+```
 
-1. ✓ Home page with featured articles
-2. ✓ News page with filters
-3. ✓ Premium page with pricing
-4. ✓ Light Apple-inspired theme
-5. ✓ Responsive design
-6. ✓ Smooth animations
-7. ✓ Articles can be viewed
-8. ✓ Category filtering works
+### 5.3 Season
+```typescript
+interface Season {
+  id: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  theme: string;
+  background: string;
+  cars: Car[];
+}
+```
+
+## 6. Currency System
+- **Cash**: Earned from races, bonuses
+- **XP**: Determines league rank
+
+## 7. Acceptance Criteria
+
+1. ✓ Racing with 3-2-1 countdown
+2. ✓ Background music during race
+3. ✓ See opponents in real-time
+4. ✓ Results screen with stats
+5. ✓ Practice mode with finger guidance
+6. ✓ Garage with owned cars
+7. ✓ Shop to buy cars
+8. ✓ Friends system
+9. ✓ Leagues system
+10. ✓ Premium/VIP subscription
+11. ✓ Seasons that change background/theme
+12. ✓ Google AdSense integration
+13. ✓ Privacy policy and terms pages

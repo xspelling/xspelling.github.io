@@ -2,95 +2,84 @@ import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark',
     primary: {
-      main: '#0071e3',
-      light: '#0077ed',
-      dark: '#005bb5',
+      main: '#6366f1',
+      light: '#818cf8',
+      dark: '#4f46e5',
     },
     secondary: {
-      main: '#86868b',
+      main: '#f59e0b',
     },
     background: {
-      default: '#f5f5f7',
-      paper: '#ffffff',
+      default: '#0f172a',
+      paper: '#1e293b',
     },
     text: {
-      primary: '#1d1d1f',
-      secondary: '#86868b',
+      primary: '#f8fafc',
+      secondary: '#94a3b8',
     },
     success: {
-      main: '#30d158',
+      main: '#10b981',
     },
     error: {
-      main: '#ff453a',
+      main: '#ef4444',
     },
     warning: {
-      main: '#ffd60a',
+      main: '#f59e0b',
+    },
+    info: {
+      main: '#06b6d4',
     },
   },
   typography: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif',
+    fontFamily: '"Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif',
     h1: {
-      fontSize: '80px',
+      fontFamily: '"Orbitron", sans-serif',
+      fontSize: '48px',
       fontWeight: 700,
-      letterSpacing: '-0.02em',
-      lineHeight: 1.1,
     },
     h2: {
-      fontSize: '56px',
+      fontFamily: '"Orbitron", sans-serif',
+      fontSize: '32px',
       fontWeight: 700,
-      letterSpacing: '-0.01em',
     },
     h3: {
-      fontSize: '40px',
+      fontFamily: '"Orbitron", sans-serif',
+      fontSize: '24px',
       fontWeight: 600,
     },
     h4: {
-      fontSize: '28px',
-      fontWeight: 500,
-    },
-    h5: {
-      fontSize: '22px',
-      fontWeight: 500,
-    },
-    h6: {
-      fontSize: '17px',
+      fontFamily: '"Orbitron", sans-serif',
+      fontSize: '20px',
       fontWeight: 600,
     },
     body1: {
-      fontSize: '17px',
-      fontWeight: 400,
+      fontSize: '16px',
     },
     body2: {
-      fontSize: '15px',
-      fontWeight: 400,
-    },
-    caption: {
-      fontSize: '13px',
-      fontWeight: 400,
+      fontSize: '14px',
     },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 8,
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
           textTransform: 'none',
-          fontWeight: 500,
-          padding: '12px 24px',
-          borderRadius: 20,
+          fontWeight: 600,
+          borderRadius: 8,
+          padding: '10px 20px',
         },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: '#ffffff',
-          borderRadius: 20,
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          backgroundColor: '#1e293b',
+          borderRadius: 12,
         },
       },
     },
@@ -98,15 +87,6 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
-        },
-      },
-    },
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: 'rgba(255,255,255,0.8)',
-          backdropFilter: 'blur(20px)',
-          boxShadow: '0 1px 0 rgba(0,0,0,0.1)',
         },
       },
     },
