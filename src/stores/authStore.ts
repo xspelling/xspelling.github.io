@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { api, User } from '../lib/api';
+import { socketManager } from '../lib/socket';
 
 interface AuthState {
   user: User | null;
@@ -20,8 +21,12 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   login: async (username: string, password: string) => {
     const response = await api.login(username, password);
-    if (response.user) {
-      set({ user: response.user as User, isAuthenticated: true });
+    if (response?.user) {
+      set({ user: response.user, isAuthenticated: true });
+      // Connect socket with the new token
+      if (response.token) {
+        socketManager.connect(response.token);
+      }
       return true;
     }
     return false;
@@ -29,8 +34,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   register: async (username: string, email: string, password: string) => {
     const response = await api.register(username, email, password);
-    if (response.user) {
-      set({ user: response.user as User, isAuthenticated: true });
+    if (response?.user) {
+      set({ user: response.user, isAuthenticated: true });
+      if (response.token) {
+        socketManager.connect(response.token);
+      }
       return true;
     }
     return false;
@@ -38,8 +46,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   guestLogin: async () => {
     const response = await api.guestLogin();
-    if (response.user) {
-      set({ user: response.user as User, isAuthenticated: true });
+    if (response?.user) {
+      set({ user: response.user, isAuthenticated: true });
+      if (response.token) {
+        socketManager.connect(response.token);
+      }
       return true;
     }
     return false;
@@ -47,21 +58,27 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: () => {
     api.setToken(null);
+    socketManager.disconnect();
     set({ user: null, isAuthenticated: false });
   },
 
   refreshUser: async () => {
-    const response = await api.getMe();
-    if (response) {
-      set({ user: response as User });
+    const user = await api.getMe();
+    if (user) {
+      set({ user });
     }
   },
 
   checkAuth: async () => {
     set({ isLoading: true });
-    const response = await api.getMe();
-    if (response) {
-      set({ user: response as User, isAuthenticated: true, isLoading: false });
+    const user = await api.getMe();
+    if (user) {
+      set({ user, isAuthenticated: true, isLoading: false });
+      // Reconnect socket if we have a stored token
+      const token = api.getToken();
+      if (token) {
+        socketManager.connect(token);
+      }
     } else {
       set({ user: null, isAuthenticated: false, isLoading: false });
     }

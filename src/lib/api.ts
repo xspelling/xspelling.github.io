@@ -1,13 +1,5 @@
 const API_URL = 'https://xspelling.duckdns.org';
 
-interface ApiResponse<T> {
-  success?: boolean;
-  data?: T;
-  error?: string;
-  token?: string;
-  user?: User;
-}
-
 export interface User {
   id: string;
   username: string;
@@ -169,6 +161,10 @@ export interface Mission {
 class Api {
   private token: string | null = localStorage.getItem('token');
 
+  getToken(): string | null {
+    return this.token;
+  }
+
   setToken(token: string | null) {
     this.token = token;
     if (token) {
@@ -178,7 +174,7 @@ class Api {
     }
   }
 
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T | null> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(options.headers as Record<string, string>),
@@ -194,15 +190,18 @@ class Api {
         headers,
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        return { error: data.error || 'Request failed' };
+        const errorData = await response.json().catch(() => null);
+        const message = errorData?.detail || errorData?.error || 'Request failed';
+        console.error(`API error ${response.status}: ${message}`);
+        return null;
       }
 
-      return data;
+      const data = await response.json();
+      return data as T;
     } catch (error) {
-      return { error: 'Network error' };
+      console.error('Network error:', error);
+      return null;
     }
   }
 
@@ -211,7 +210,7 @@ class Api {
       method: 'POST',
       body: JSON.stringify({ username, email, password }),
     });
-    if (response.token) {
+    if (response?.token) {
       this.setToken(response.token);
     }
     return response;
@@ -222,7 +221,7 @@ class Api {
       method: 'POST',
       body: JSON.stringify({ username, password }),
     });
-    if (response.token) {
+    if (response?.token) {
       this.setToken(response.token);
     }
     return response;
@@ -232,7 +231,7 @@ class Api {
     const response = await this.request<{ token: string; user: User }>('/auth/guest', {
       method: 'POST',
     });
-    if (response.token) {
+    if (response?.token) {
       this.setToken(response.token);
     }
     return response;
@@ -259,7 +258,7 @@ class Api {
   }
 
   async quickPlay(difficulty = 'medium') {
-    return this.request<{ roomId: string; room: Room } | { status: string }>('/race/quick-play', {
+    return this.request<{ roomId: string; room: Room } | { status: string; message: string }>('/race/quick-play', {
       method: 'POST',
       body: JSON.stringify({ difficulty }),
     });
@@ -303,7 +302,7 @@ class Api {
   }
 
   async getFriends() {
-    return this.request<{ friends: User[]; requests: User[] }>('/friends');
+    return this.request<{ friends: User[]; incomingRequests: User[]; outgoingRequests: User[] }>('/friends');
   }
 
   async addFriend(userId: string) {
@@ -339,19 +338,19 @@ class Api {
   }
 
   async getLeaderboard() {
-    return this.request<LeaderboardEntry[]>('/leaderboard');
+    return this.request<{ leaderboard: LeaderboardEntry[]; yourRank: number }>('/leaderboard');
   }
 
   async getWeeklyLeaderboard() {
-    return this.request<LeaderboardEntry[]>('/leaderboard/weekly');
+    return this.request<{ leaderboard: LeaderboardEntry[]; yourRank: number }>('/leaderboard/weekly');
   }
 
   async getAchievements() {
-    return this.request<Achievement[]>('/achievements');
+    return this.request<{ achievements: Achievement[] }>('/achievements');
   }
 
   async getDailyReward() {
-    return this.request<{ claimed: boolean; canClaim: boolean; streak: number; reward?: number; nextReward?: number }>('/daily-reward');
+    return this.request<{ canClaim: boolean; claimedToday: boolean; streak: number; currentReward: number; nextReward: number }>('/daily-reward');
   }
 
   async getMissions() {
@@ -360,6 +359,12 @@ class Api {
 
   async getStats() {
     return this.request<any>('/stats');
+  }
+
+  async openMysteryBox() {
+    return this.request<{ rewardType: string; rewardValue: number; car?: Car; newBalance: number }>('/mystery-box/open', {
+      method: 'POST',
+    });
   }
 
   async createClassroom(name: string, description?: string) {

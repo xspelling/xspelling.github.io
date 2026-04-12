@@ -301,8 +301,8 @@ function HomePage() {
   const loadLeaderboard = async () => {
     const response = await api.getLeaderboard();
     if (response) {
-      const data = response as LeaderboardEntry[];
-      setTopPlayers(data.slice(0, 5));
+      const entries = (response as any).leaderboard || response;
+      setTopPlayers((entries as LeaderboardEntry[]).slice(0, 5));
     }
   };
 
@@ -559,7 +559,11 @@ function HomePage() {
 
 // Race Page
 function RacePage() {
-  const { room, isCountdown, countdown, isRacing, text, currentIndex, errors, wpm, accuracy, finished, handleKeyPress, leaveRoom, reset } = useRaceStore();
+  const {
+    room, roomId, isCountdown, countdown, isRacing, text, currentIndex, errors,
+    wpm, accuracy, finished, result, rewards, players, errorAtIndex,
+    handleKeyPress, leaveRoom, reset, startRace, cleanupSocketListeners,
+  } = useRaceStore();
   const { user } = useAuthStore();
   const navigate = useNavigate();
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -570,6 +574,13 @@ function RacePage() {
     }
   }, [room]);
 
+  // Setup socket listeners on mount, cleanup on unmount
+  useEffect(() => {
+    return () => {
+      cleanupSocketListeners();
+    };
+  }, []);
+
   useEffect(() => {
     if (!isRacing || finished) return;
     const interval = setInterval(() => setElapsedTime(t => t + 1), 1000);
@@ -579,6 +590,11 @@ function RacePage() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (!isRacing || finished) return;
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        handleKeyPress('Backspace');
+        return;
+      }
       if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
         e.preventDefault();
         handleKeyPress(e.key);
@@ -589,6 +605,8 @@ function RacePage() {
   }, [isRacing, finished, handleKeyPress]);
 
   const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
+
+  const playerList = Object.values(players);
 
   if (!room) return null;
 
@@ -611,14 +629,18 @@ function RacePage() {
         <div className="bg-surface border border-white/10 rounded-2xl p-8 max-w-lg w-full text-center">
           <div className="text-8xl mb-4">🏆</div>
           <h1 className="text-4xl font-display font-bold mb-2">Race Complete!</h1>
-          
+
+          {result && (
+            <p className="text-gray-400 mb-2">You finished in <span className="text-yellow-400 font-bold">#{result.place}</span> place!</p>
+          )}
+
           <div className="grid grid-cols-3 gap-4 my-6">
             <div className="bg-dark p-4 rounded-xl">
-              <p className="text-3xl font-bold text-accent">{wpm}</p>
+              <p className="text-3xl font-bold text-accent">{result?.wpm || wpm}</p>
               <p className="text-sm text-gray-400">WPM</p>
             </div>
             <div className="bg-dark p-4 rounded-xl">
-              <p className="text-3xl font-bold text-primary">{accuracy}%</p>
+              <p className="text-3xl font-bold text-primary">{result?.accuracy || accuracy}%</p>
               <p className="text-sm text-gray-400">Accuracy</p>
             </div>
             <div className="bg-dark p-4 rounded-xl">
@@ -626,6 +648,37 @@ function RacePage() {
               <p className="text-sm text-gray-400">Time</p>
             </div>
           </div>
+
+          {rewards && (
+            <div className="flex justify-center gap-6 my-4">
+              <div className="text-center">
+                <p className="text-xl font-bold text-blue-400">+{rewards.xp}</p>
+                <p className="text-xs text-gray-400">XP</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xl font-bold text-yellow-400">+{rewards.cash}</p>
+                <p className="text-xs text-gray-400">Coins</p>
+              </div>
+            </div>
+          )}
+
+          {/* Final standings */}
+          {playerList.filter(p => p.finished).length > 0 && (
+            <div className="my-4 space-y-2">
+              {playerList
+                .filter(p => p.finished)
+                .sort((a, b) => (a.place || 99) - (b.place || 99))
+                .map(p => (
+                  <div key={p.id} className="bg-dark rounded-lg px-4 py-2 flex items-center gap-3">
+                    <span className="text-yellow-400 font-bold w-6">#{p.place}</span>
+                    <span>{p.car.emoji}</span>
+                    <span className="flex-1 text-left text-sm">{p.username}</span>
+                    <span className="text-accent text-sm">{p.wpm} WPM</span>
+                    <span className="text-gray-400 text-sm">{p.accuracy}%</span>
+                  </div>
+                ))}
+            </div>
+          )}
 
           <div className="flex gap-4">
             <button
@@ -648,7 +701,7 @@ function RacePage() {
             <span className="text-2xl">🏁</span>
             <div>
               <p className="text-sm text-gray-400">Room</p>
-              <p className="font-mono font-bold text-primary">{room.id}</p>
+              <p className="font-mono font-bold text-primary">{roomId || room.id}</p>
             </div>
           </div>
           <div className="flex items-center gap-6">
@@ -670,20 +723,48 @@ function RacePage() {
           </div>
         </div>
 
+        {/* Race Track - All players */}
+        {playerList.length > 0 && (
+          <div className="space-y-3 mb-6">
+            {playerList.map(player => (
+              <div key={player.id} className="bg-surface border border-white/10 rounded-xl p-3">
+                <div className="flex items-center gap-3 mb-1">
+                  <span>{player.car.emoji}</span>
+                  <span className={`text-sm ${player.id === user?.id ? 'text-primary font-bold' : 'text-gray-300'}`}>
+                    {player.username}{player.id === user?.id ? ' (You)' : ''}{player.isBot ? ' [BOT]' : ''}
+                  </span>
+                  {player.finished && <span className="text-xs text-yellow-400">#{player.place}</span>}
+                  <span className="text-xs text-gray-400 ml-auto">{player.wpm} WPM</span>
+                </div>
+                <div className="h-2 bg-gray-700 rounded-full">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${
+                      player.id === user?.id
+                        ? 'bg-gradient-to-r from-accent to-green-400'
+                        : 'bg-gradient-to-r from-blue-500 to-cyan-400'
+                    }`}
+                    style={{ width: `${(player.progress || (player.id === user?.id ? currentIndex / (text.length || 1) : 0)) * 100}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {room.status === 'waiting' && (
           <div className="bg-surface border border-white/10 rounded-2xl p-6 text-center">
             <p className="text-gray-400 mb-4">Waiting for players...</p>
             <div className="flex gap-2 justify-center mb-4">
-              {room.players.map((player) => (
+              {(room.players || playerList).map((player) => (
                 <div key={player.id} className="bg-dark px-3 py-2 rounded-lg flex items-center gap-2">
                   <span>{player.car?.emoji || '🚗'}</span>
                   <span className="text-sm text-gray-300">{player.username}</span>
                 </div>
               ))}
             </div>
-            {user && room.players[0]?.id === user.id && room.players.length >= 1 && (
+            {user && (room.players?.[0]?.id === user.id || playerList[0]?.id === user.id) && (
               <button
-                onClick={() => api.startRace(room.id)}
+                onClick={() => startRace()}
                 className="bg-accent hover:bg-accent/80 px-8 py-3 rounded-xl font-bold text-lg transition"
               >
                 🚀 Start Race
@@ -692,31 +773,28 @@ function RacePage() {
           </div>
         )}
 
-        {room.status === 'racing' && (
+        {(room.status === 'racing' || isRacing) && (
           <>
             <div className="bg-surface border border-white/10 rounded-2xl p-6 mb-6">
-              <div className="mb-4">
-                <p className="text-sm text-gray-400 mb-2">Your Progress</p>
-                <div className="h-3 bg-dark rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-accent to-green-400 transition-all"
-                    style={{ width: `${(currentIndex / (text.length || 1)) * 100}%` }}
-                  />
-                </div>
-              </div>
-
               <div className="bg-dark p-4 rounded-xl font-mono text-xl leading-relaxed">
                 {(text || '').split('').map((char, i) => (
                   <span key={i} className={
                     i < currentIndex ? 'text-green-400' :
+                    i === currentIndex && errorAtIndex ? 'text-red-400 bg-red-400/20 underline' :
                     i === currentIndex ? 'text-primary bg-primary/20' :
                     'text-gray-500'
                   }>{char}</span>
                 ))}
               </div>
 
+              {errorAtIndex && (
+                <p className="text-red-400 text-center mt-3 animate-pulse">
+                  Wrong character! Press Backspace to fix.
+                </p>
+              )}
+
               {errors > 0 && (
-                <p className="text-red-400 text-center mt-4">
+                <p className="text-red-400 text-center mt-2 text-sm">
                   {errors} {errors === 1 ? 'error' : 'errors'}
                 </p>
               )}
@@ -872,7 +950,7 @@ function ShopPage() {
     }
     
     const response = await api.buyCar(car.id);
-    if (response.success) {
+    if (response) {
       alert(`You bought ${car.name}!`);
       loadShop();
     }
@@ -1044,8 +1122,8 @@ function LeaderboardPage() {
 
   const loadLeaderboard = async () => {
     const response = tab === 'global' ? await api.getLeaderboard() : await api.getWeeklyLeaderboard();
-    if (response?.data) {
-      setLeaderboard(response.data);
+    if (response) {
+      setLeaderboard((response as any).leaderboard || []);
     }
   };
 
@@ -1108,7 +1186,7 @@ function FriendsPage() {
     const response = await api.getFriends();
     if (response) {
       setFriends((response as any).friends || []);
-      setRequests((response as any).requests || []);
+      setRequests((response as any).incomingRequests || (response as any).incoming_requests || []);
     }
   };
 
@@ -1116,7 +1194,7 @@ function FriendsPage() {
     if (!search.trim()) return;
     const response = await api.getUsers(search);
     if (response) {
-      const users = response as User[];
+      const users = (Array.isArray(response) ? response : []) as User[];
       setSearchResults(users.filter(u => u.id !== user?.id && !friends.some(f => f.id === u.id)));
     }
   };
@@ -1218,7 +1296,7 @@ function TeamsPage() {
 
   const loadTeams = async () => {
     const response = await api.getTeams();
-    if (response) setTeams(response as any[]);
+    if (response) setTeams(Array.isArray(response) ? response as any[] : []);
   };
 
   const handleCreate = async () => {
@@ -1332,7 +1410,7 @@ function AchievementsPage() {
   const [achievements, setAchievements] = useState<any[]>([]);
 
   useEffect(() => {
-    api.getAchievements().then(r => r && setAchievements(r as any[]));
+    api.getAchievements().then(r => r && setAchievements((r as any).achievements || []));
   }, []);
 
   return (
