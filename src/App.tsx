@@ -33,7 +33,7 @@ function Header() {
             {isAuthenticated && user ? (
               <>
                 <div className="flex items-center gap-2 bg-dark px-3 py-1.5 rounded-full">
-                  <span className="text-yellow-400 font-bold">{user.cash.toLocaleString()}</span>
+                  <span className="text-yellow-400 font-bold">{(user.cash || 0).toLocaleString()}</span>
                   <span>🪙</span>
                 </div>
                 <button
@@ -429,27 +429,27 @@ function HomePage() {
                       <p className="text-xs text-gray-400">Level</p>
                     </div>
                     <div className="bg-dark p-3 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-accent">{user.highestWPM}</p>
+                      <p className="text-2xl font-bold text-accent">{user.highestWPM || 0}</p>
                       <p className="text-xs text-gray-400">Best WPM</p>
                     </div>
                     <div className="bg-dark p-3 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-purple-400">{user.totalRaces}</p>
+                      <p className="text-2xl font-bold text-purple-400">{user.totalRaces || 0}</p>
                       <p className="text-xs text-gray-400">Races</p>
                     </div>
                     <div className="bg-dark p-3 rounded-xl text-center">
-                      <p className="text-2xl font-bold text-yellow-400">{user.streak}</p>
+                      <p className="text-2xl font-bold text-yellow-400">{user.streak || 0}</p>
                       <p className="text-xs text-gray-400">Streak</p>
                     </div>
                   </div>
                   <div className="bg-dark p-4 rounded-xl">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-400">XP Progress</span>
-                      <span className="text-sm text-primary">{user.xp.toLocaleString()} XP</span>
+                      <span className="text-sm text-primary">{(user.xp || 0).toLocaleString()} XP</span>
                     </div>
                     <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-primary to-secondary transition-all"
-                        style={{ width: `${(user.xp % 500) / 5}%` }}
+                        style={{ width: `${((user.xp || 0) % 500) / 5}%` }}
                       />
                     </div>
                   </div>
@@ -461,13 +461,13 @@ function HomePage() {
                     <div className="flex items-center gap-3">
                       <span className="text-4xl">🔥</span>
                       <div>
-                        <p className="text-2xl font-bold text-orange-400">{user.streak} days</p>
+                        <p className="text-2xl font-bold text-orange-400">{user.streak || 0} days</p>
                         <p className="text-sm text-gray-400">Keep it going!</p>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-gray-400">Multiplier</p>
-                      <p className="font-bold text-orange-400">×{Math.min(1 + user.streak * 0.1, 3).toFixed(1)}</p>
+                      <p className="font-bold text-orange-400">×{Math.min(1 + (user.streak || 0) * 0.1, 3).toFixed(1)}</p>
                     </div>
                   </div>
                 </div>
@@ -489,7 +489,7 @@ function HomePage() {
                       <p className="text-xs text-gray-400">{player.league} • {player.highestWPM} WPM</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-primary">{player.xp.toLocaleString()}</p>
+                      <p className="font-bold text-primary">{(player.xp || 0).toLocaleString()}</p>
                       <p className="text-xs text-gray-400">XP</p>
                     </div>
                   </div>
@@ -985,7 +985,7 @@ function ShopPage() {
 
         <h2 className="text-xl font-bold mb-4">⭐ Featured</h2>
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {shopData?.featuredItems.map((car) => (
+          {(shopData?.featuredItems || []).map((car) => (
             <div key={car.id} className={`bg-surface border-2 ${getRarityColor(car.rarity)} rounded-2xl p-6`}>
               <div className="text-center mb-4">
                 <span className="text-6xl block mb-2">{car.emoji}</span>
@@ -1006,7 +1006,7 @@ function ShopPage() {
                 onClick={() => handleBuy(car)}
                 className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 rounded-xl"
               >
-                🪙 {car.price.toLocaleString()}
+                🪙 {(car.price || 0).toLocaleString()}
               </button>
             </div>
           ))}
@@ -1014,7 +1014,7 @@ function ShopPage() {
 
         <h2 className="text-xl font-bold mb-4">📦 Daily Deals</h2>
         <div className="grid md:grid-cols-4 gap-4">
-          {shopData?.dailyItems.map((car) => (
+          {(shopData?.dailyItems || []).map((car) => (
             <div key={car.id} className={`bg-surface border ${getRarityColor(car.rarity)} rounded-xl p-4`}>
               <div className="text-center mb-2">
                 <span className="text-4xl">{car.emoji}</span>
@@ -1024,7 +1024,7 @@ function ShopPage() {
                 onClick={() => handleBuy(car)}
                 className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 rounded-lg text-sm"
               >
-                🪙 {car.price.toLocaleString()}
+                🪙 {(car.price || 0).toLocaleString()}
               </button>
             </div>
           ))}
@@ -1047,7 +1047,7 @@ function GaragePage() {
   const loadGarage = async () => {
     const response = await api.getGarage();
     if (response) {
-      setOwnedCars((response as any).ownedCars);
+      setOwnedCars((response as any).ownedCars || []);
     }
     setLoading(false);
   };
@@ -1159,7 +1159,7 @@ function LeaderboardPage() {
                 <p className="text-sm text-gray-400">{player.league} • Level {player.level}</p>
               </div>
               <div className="text-right">
-                <p className="font-bold text-primary">{tab === 'weekly' ? (player.weeklyXP || 0).toLocaleString() : player.xp.toLocaleString()} XP</p>
+                <p className="font-bold text-primary">{tab === 'weekly' ? (player.weeklyXP || 0).toLocaleString() : (player.xp || 0).toLocaleString()} XP</p>
                 <p className="text-sm text-gray-400">{player.highestWPM} WPM</p>
               </div>
             </div>
@@ -1194,7 +1194,7 @@ function FriendsPage() {
     if (!search.trim()) return;
     const response = await api.getUsers(search);
     if (response) {
-      const users = (Array.isArray(response) ? response : []) as User[];
+      const users = (Array.isArray(response) ? response : (response as any).users || []) as User[];
       setSearchResults(users.filter(u => u.id !== user?.id && !friends.some(f => f.id === u.id)));
     }
   };
@@ -1296,7 +1296,7 @@ function TeamsPage() {
 
   const loadTeams = async () => {
     const response = await api.getTeams();
-    if (response) setTeams(Array.isArray(response) ? response as any[] : []);
+    if (response) setTeams(Array.isArray(response) ? response as any[] : (response as any).teams || []);
   };
 
   const handleCreate = async () => {
@@ -1433,10 +1433,10 @@ function AchievementsPage() {
                 <div className="h-2 bg-dark rounded-full overflow-hidden">
                   <div
                     className={`h-full ${a.unlocked ? 'bg-yellow-500' : 'bg-primary'}`}
-                    style={{ width: `${Math.min((a.progress / a.target) * 100, 100)}%` }}
+                    style={{ width: `${Math.min(((a.progress || 0) / (a.target || 1)) * 100, 100)}%` }}
                   />
                 </div>
-                <p className="text-xs text-gray-400 mt-1">{a.progress}/{a.target}</p>
+                <p className="text-xs text-gray-400 mt-1">{a.progress || 0}/{a.target || 0}</p>
               </div>
             </div>
           ))}
@@ -1463,7 +1463,7 @@ function MissionsPage() {
         
         <h2 className="text-xl font-bold mb-4">☀️ Daily Missions</h2>
         <div className="space-y-4 mb-8">
-          {missions.daily.map((m) => (
+          {(missions.daily || []).map((m) => (
             <div key={m.id} className="bg-surface border border-white/10 rounded-xl p-4">
               <div className="flex justify-between items-start">
                 <div>
@@ -1479,7 +1479,7 @@ function MissionsPage() {
                 <div className="h-2 bg-dark rounded-full overflow-hidden">
                   <div
                     className={`h-full ${m.completed ? 'bg-green-400' : 'bg-primary'}`}
-                    style={{ width: `${Math.min((m.progress / m.target) * 100, 100)}%` }}
+                    style={{ width: `${Math.min(((m.progress || 0) / (m.target || 1)) * 100, 100)}%` }}
                   />
                 </div>
                 <p className="text-xs text-gray-400 mt-1">{m.progress}/{m.target}</p>
@@ -1490,7 +1490,7 @@ function MissionsPage() {
 
         <h2 className="text-xl font-bold mb-4">📅 Weekly Missions</h2>
         <div className="space-y-4">
-          {missions.weekly.map((m) => (
+          {(missions.weekly || []).map((m) => (
             <div key={m.id} className="bg-surface border border-white/10 rounded-xl p-4">
               <div className="flex justify-between items-start">
                 <div>
@@ -1506,7 +1506,7 @@ function MissionsPage() {
                 <div className="h-2 bg-dark rounded-full overflow-hidden">
                   <div
                     className={`h-full ${m.completed ? 'bg-green-400' : 'bg-purple-400'}`}
-                    style={{ width: `${Math.min((m.progress / m.target) * 100, 100)}%` }}
+                    style={{ width: `${Math.min(((m.progress || 0) / (m.target || 1)) * 100, 100)}%` }}
                   />
                 </div>
                 <p className="text-xs text-gray-400 mt-1">{m.progress}/{m.target}</p>
@@ -1567,7 +1567,7 @@ function ProfilePage() {
 
         <h2 className="text-xl font-bold mb-4">🏆 Achievements</h2>
         <div className="grid grid-cols-4 gap-4">
-          {user.achievements.filter(a => a.unlocked).slice(0, 8).map((a) => (
+          {(user.achievements || []).filter(a => a.unlocked).slice(0, 8).map((a) => (
             <div key={a.id} className="bg-surface p-4 rounded-xl text-center">
               <span className="text-3xl">{a.icon}</span>
               <p className="text-sm font-medium mt-2">{a.name}</p>

@@ -350,7 +350,9 @@ class Api {
   }
 
   async getDailyReward() {
-    return this.request<{ canClaim: boolean; claimedToday: boolean; streak: number; currentReward: number; nextReward: number }>('/daily-reward');
+    return this.request<{ canClaim: boolean; claimedToday: boolean; streak: number; currentReward: number; nextReward: number }>('/daily-reward', {
+      method: 'POST',
+    });
   }
 
   async getMissions() {
