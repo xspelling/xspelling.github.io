@@ -393,6 +393,80 @@ class Api {
       body: JSON.stringify({ userId, reason, details }),
     });
   }
+
+  // Admin methods
+  private adminToken: string | null = localStorage.getItem('admin_token');
+
+  getAdminToken(): string | null {
+    return this.adminToken;
+  }
+
+  setAdminToken(token: string | null) {
+    this.adminToken = token;
+    if (token) {
+      localStorage.setItem('admin_token', token);
+    } else {
+      localStorage.removeItem('admin_token');
+    }
+  }
+
+  private async adminRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T | null> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...(options.headers as Record<string, string>),
+    };
+    if (this.adminToken) {
+      headers['Authorization'] = `Bearer ${this.adminToken}`;
+    }
+    try {
+      const response = await fetch(`${API_URL}/api${endpoint}`, { ...options, headers });
+      if (!response.ok) return null;
+      return await response.json() as T;
+    } catch {
+      return null;
+    }
+  }
+
+  async adminLogin(username: string, password: string) {
+    const response = await this.adminRequest<{ token: string }>('/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+    });
+    if (response?.token) {
+      this.setAdminToken(response.token);
+    }
+    return response;
+  }
+
+  async getAdminDashboard() {
+    return this.adminRequest<{ totalUsers: number; totalRaces: number; activeUsers: number; revenue: number }>('/admin/dashboard');
+  }
+
+  async getAdminUsers(page = 1, limit = 20, search = '') {
+    return this.adminRequest<{ users: User[]; total: number }>(`/admin/users?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`);
+  }
+
+  async adminEditUser(id: string, data: Partial<User>) {
+    return this.adminRequest<User>(`/admin/users/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  }
+
+  async adminDeleteUser(id: string) {
+    return this.adminRequest<{ success: boolean }>(`/admin/users/${id}`, { method: 'DELETE' });
+  }
+
+  async adminGiveCar(id: string, carId: string) {
+    return this.adminRequest<{ success: boolean }>(`/admin/users/${id}/give-car`, {
+      method: 'POST',
+      body: JSON.stringify({ carId }),
+    });
+  }
+
+  async adminGiveCash(id: string, amount: number) {
+    return this.adminRequest<{ success: boolean }>(`/admin/users/${id}/give-cash`, {
+      method: 'POST',
+      body: JSON.stringify({ amount }),
+    });
+  }
 }
 
 export const api = new Api();

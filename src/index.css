@@ -2,67 +2,176 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a1a;
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #root { position: relative; z-index: 1; }
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: #0f0f23;
-  color: #ffffff;
-  min-height: 100vh;
+@layer components {
+  .font-display { font-family: 'Orbitron', sans-serif; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Glass morphism card */
+  .glass-card {
+    background: rgba(26, 26, 46, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+  }
+
+  .glass-card-hover {
+    background: rgba(26, 26, 46, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+  }
+  .glass-card-hover:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Neon text glow */
+  .text-glow {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor;
+  }
+  .text-glow-sm {
+    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  }
+
+  /* Racing track */
+  .race-track {
+    background: linear-gradient(90deg, rgba(26, 26, 46, 0.9), rgba(15, 15, 35, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .race-track::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 48%,
+      rgba(255, 255, 255, 0.03) 48%,
+      rgba(255, 255, 255, 0.03) 52%,
+      transparent 52%
+    );
+  }
+
+  /* Progress bar with glow */
+  .progress-bar {
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3);
+    transition: width 0.3s ease-out;
+  }
+
+  /* Typing text styles */
+  .char-correct { color: #00ff88; }
+  .char-current {
+    color: #ffffff;
+    background: rgba(99, 102, 241, 0.3);
+    border-bottom: 2px solid #6366f1;
+    animation: typing-cursor 1s step-end infinite;
+  }
+  .char-error {
+    color: #ff4444;
+    background: rgba(244, 63, 94, 0.3);
+    border-bottom: 2px solid #f43f5e;
+  }
+  .char-pending { color: rgba(255, 255, 255, 0.25); }
+
+  /* Rarity colors */
+  .rarity-common { border-color: #9ca3af; color: #9ca3af; }
+  .rarity-uncommon { border-color: #22c55e; color: #22c55e; }
+  .rarity-rare { border-color: #3b82f6; color: #3b82f6; }
+  .rarity-epic { border-color: #a855f7; color: #a855f7; }
+  .rarity-legendary {
+    border-color: #f59e0b; color: #f59e0b;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+  }
+  .rarity-event {
+    border-color: #f43f5e; color: #f43f5e;
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.1), transparent);
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-bold transition-all duration-200;
+    background: #6366f1;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  }
+  .btn-primary:hover {
+    background: #4f46e5;
+    box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-accent {
+    @apply px-6 py-3 rounded-xl font-bold transition-all duration-200;
+    background: #f43f5e;
+    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
+  }
+  .btn-accent:hover {
+    background: #e11d48;
+    box-shadow: 0 6px 25px rgba(244, 63, 94, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-neon {
+    @apply px-6 py-3 rounded-xl font-bold transition-all duration-200 border-2;
+    border-color: #00d4ff;
+    color: #00d4ff;
+    text-shadow: 0 0 5px #00d4ff;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.2), inset 0 0 10px rgba(0, 212, 255, 0.1);
+  }
+  .btn-neon:hover {
+    background: rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), inset 0 0 20px rgba(0, 212, 255, 0.2);
+  }
+
+  /* League badges */
+  .league-bronze { background: linear-gradient(135deg, #cd7f32, #b87333); }
+  .league-silver { background: linear-gradient(135deg, #c0c0c0, #a8a8a8); }
+  .league-gold { background: linear-gradient(135deg, #ffd700, #daa520); }
+  .league-platinum { background: linear-gradient(135deg, #e5e4e2, #b8b8b8); }
+  .league-diamond { background: linear-gradient(135deg, #b9f2ff, #4fc3f7); }
+  .league-master { background: linear-gradient(135deg, #ff6b6b, #ee5a24); }
+  .league-legend { background: linear-gradient(135deg, #f43f5e, #8b5cf6, #6366f1); }
 }
 
-.font-display {
-  font-family: 'Orbitron', sans-serif;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.5); }
 
-.font-mono {
-  font-family: 'JetBrains Mono', monospace;
-}
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
-  50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.8); }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1a1a2e;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #6366f1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #8b5cf6;
-}
+/* Selection */
+::selection { background: rgba(99, 102, 241, 0.4); color: #fff; }
