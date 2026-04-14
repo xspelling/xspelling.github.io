@@ -4,15 +4,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>TypeRush - Competitive Typing Racing</title>
     <meta name="description" content="Race against others in competitive typing battles. Improve your typing speed, collect cars, and climb the leagues!" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-Bo7Z-avX.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-e6G5rU_q.css">
+    <script type="module" crossorigin src="/assets/index-DXv0x2I9.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-t93WZIlT.css">
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Clear old service workers and caches on each load
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (let registration of registrations) { registration.unregister(); }
+        });
+      }
+      if ('caches' in window) {
+        caches.keys().then(function(names) {
+          for (let name of names) { caches.delete(name); }
+        });
+      }
+    </script>
   </body>
 </html>
